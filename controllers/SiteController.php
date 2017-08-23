@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\HttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
@@ -122,5 +123,22 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function beforeAction($action)
+    {
+        $userName = Yii::$app->getRequest()->headers['X-UserName'];
+        $password = Yii::$app->getRequest()->headers['X-Password'];
+        var_dump(1);
+        if (isset($userName) && 'admin' === $userName) {
+            var_dump(2);
+            if (isset($password) && md5(123456) === $password) {
+                return parent::beforeAction($action);
+            } else {
+                Yii::$app->getResponse()->setStatusCode(401);
+                return false;
+            }
+        }
+
     }
 }
