@@ -129,16 +129,13 @@ class SiteController extends Controller
     {
         $userName = Yii::$app->getRequest()->headers['X-UserName'];
         $password = Yii::$app->getRequest()->headers['X-Password'];
-        var_dump(1);
         if (isset($userName) && 'admin' === $userName) {
-            var_dump(2);
-            if (isset($password) && md5(123456) === $password) {
+            if (isset($password) && md5('123456') === md5($password)) {
                 return parent::beforeAction($action);
             } else {
                 Yii::$app->getResponse()->setStatusCode(401);
                 return false;
             }
         }
-
     }
 }
